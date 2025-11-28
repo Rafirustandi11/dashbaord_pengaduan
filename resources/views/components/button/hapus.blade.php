@@ -1,0 +1,1 @@
+<button wire:click="delete({{ $item->id }})" class="px-3 py-1 bg-red-500 text-white rounded">🗑️</button>

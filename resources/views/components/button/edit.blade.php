@@ -1,0 +1,1 @@
+<button wire:click="edit({{ $item->id }})" class="px-3 py-1 bg-blue-500 text-white rounded"> ✏️</button>

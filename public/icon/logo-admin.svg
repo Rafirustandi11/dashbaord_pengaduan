@@ -1,0 +1,15 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Logo untuk Admin Panel -->
+  <rect x="5" y="5" width="50" height="50" rx="12" fill="#8B5CF6"/>
+  <path d="M30 18L30 42M18 30L42 30" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="30" cy="30" r="3" fill="white"/>
+  <path d="M38 20L42 20L42 24" stroke="#FCD34D" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Text -->
+  <text x="65" y="28" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#030213">
+    Admin Panel
+  </text>
+  <text x="65" y="45" font-family="Arial, sans-serif" font-size="12" fill="#717182">
+    Sistem Pengaduan
+  </text>
+</svg>

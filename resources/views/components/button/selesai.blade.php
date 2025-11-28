@@ -1,0 +1,1 @@
+<button wire:click="show({{ $item->id }})" class="px-3 py-1 bg-gray-500 text-white rounded">✅</button>
