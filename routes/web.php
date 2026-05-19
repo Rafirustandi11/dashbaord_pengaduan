@@ -13,14 +13,13 @@ use App\Livewire\Admin\PengaduanTrash;
 use App\Livewire\Admin\HistoriPengaduan as AdminHistoriPengaduan;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Bidang\EditPengaduan;
-use App\Livewire\Bidang\PengaduanBidang as BidangPengaduan; // ✅ pakai alias
+use App\Livewire\Bidang\PengaduanBidang as BidangPengaduan;
 use App\Livewire\Bidang\HistoriPengaduan as BidangHistoriPengaduan;
 use App\Http\Controllers\PengaduanController;
-use App\Livewire\PengaduanCreate;
 use App\Http\Controllers\ExportController;
 
 // =======================
-// 🌐 HALAMAN UTAMA (REDIRECT LOGIN OTOMATIS)
+// 🌐 REDIRECT BY ROLE
 // =======================
 Route::get('/redirect-by-role', function () {
     $user = Auth::user();
@@ -39,7 +38,7 @@ Route::get('/redirect-by-role', function () {
 })->name('redirect.by.role');
 
 // =======================
-// 👤 DEFAULT DASHBOARD JETSTREAM (USER UMUM)
+// 👤 DEFAULT DASHBOARD JETSTREAM
 // =======================
 Route::middleware([
     'auth:sanctum',
@@ -59,7 +58,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/users/trash', \App\Livewire\Admin\UserManagementTrash::class)->name('admin.user-management.trash');
     Route::get('/admin/dashboard', AdminDashboard::class)->name('admin.dashboard');
     Route::get('/admin/pengaduan', Pengaduan::class)->name('admin.pengaduan');
-    Route::get('/admin/pengaduan/sampah', PengaduanTrash::class)->middleware('auth')->name('admin.pengaduan.trash');
+    Route::get('/admin/pengaduan/sampah', PengaduanTrash::class)->name('admin.pengaduan.trash');
     Route::get('/admin/histori-pengaduan', AdminHistoriPengaduan::class)->name('admin.histori-pengaduan');
     Route::get('/profil-admin', ProfilAdmin::class)->name('admin.profil-admin');
     Route::get('/admin/form-fields', FormFieldManager::class)->name('admin.form-fields');
@@ -79,30 +78,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/bidang/profil', ProfilBidang::class)->name('bidang.profil');
 });
 
-// ======================
-// Pengaduan User/Warga
-// ======================
-Route::get('/pengaduan', [PengaduanController::class, 'create'])->name('pengaduan.create');
-Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
-Route::get('/pengaduan', PengaduanCreate::class)->name('pengaduan.form');
+// =======================
+// 📝 PENGADUAN PUBLIK (NON-LOGIN)
+// ⚠️  /pengaduan/sukses HARUS di atas /pengaduan
+//     agar tidak tertangkap sebagai parameter dinamis
+// Cek status pengaduan (non-login)
+// =======================
+Route::get('/pengaduan/sukses', [PengaduanController::class, 'sukses'])->name('pengaduan.sukses');
+Route::get('/pengaduan', \App\Livewire\PengaduanCreate::class)->name('pengaduan.create');
+Route::get('/cek-pengaduan', [PengaduanController::class, 'cekForm'])->name('pengaduan.cek');
+Route::post('/cek-pengaduan', [PengaduanController::class, 'cekHasil'])->name('pengaduan.cek.hasil');
 
-
-
-// ========================= 
-// Logout 
-// =========================
+// =======================
+// 🚪 LOGOUT
+// =======================
 Route::post('/logout', function (Request $request) {
     Auth::guard('web')->logout();
 
     $request->session()->invalidate();
     $request->session()->regenerateToken();
-
-    // 🔹 Redirect sesuai role (supaya elegan)
-    if ($request->user()?->role === 'admin') {
-        return redirect('/login')->with('status', 'Anda telah logout dari Admin Dashboard');
-    } elseif ($request->user()?->role === 'bidang') {
-        return redirect('/login')->with('status', 'Anda telah logout dari Bidang Dashboard');
-    }
 
     return redirect('/login');
 })->name('logout');

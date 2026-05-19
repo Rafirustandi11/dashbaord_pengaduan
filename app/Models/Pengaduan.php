@@ -14,23 +14,32 @@ class Pengaduan extends Model
     protected $table = 'pengaduans';
 
     protected $fillable = [
+        'kode_pengaduan',
         'nama_warga',
         'email',
+        'no_hp',
         'kategori',
+        'lokasi_kejadian',
         'bidang_tujuan',
         'isi_laporan',
+        'lampiran',
         'balasan',
         'status',
+        'tanggapan',
+        'tanggapan_admin',
         'tanggapan_bidang',
+        'tanggal_disposisi',
+        'tanggal_selesai',
         'created_at',
         'updated_at',
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'tanggal_masuk' => 'datetime',
-        'tanggal_selesai' => 'datetime',
+        'created_at'        => 'datetime',
+        'updated_at'        => 'datetime',
+        'tanggal_masuk'     => 'datetime',
+        'tanggal_disposisi' => 'datetime',
+        'tanggal_selesai'   => 'datetime',
     ];
 
     public function bidang()
@@ -44,7 +53,7 @@ class Pengaduan extends Model
             return null;
         }
 
-        $endDate = $this->updated_at ?? Carbon::now();
+        $endDate = $this->tanggal_selesai ?? $this->updated_at ?? Carbon::now();
         return $this->created_at->diffInDays($endDate) . ' hari';
     }
 }
